@@ -34,11 +34,27 @@ def ml_loop(side: str):
 
     def ml_loop_for_1P(): 
         slope=1
+        blocker_pred=0
         if (scene_info["ball_speed"][0]!=0):    
             slope=(scene_info["ball_speed"][1]/scene_info["ball_speed"][0])  
         if (scene_info["ball_speed"][1]<0):
-            pred = 100
-            return move_to(player = '1P',pred = pred)
+            if(scene_info["ball"][1]>270):
+                blocker_pred=(270-scene_info["ball"][1])/slope +scene_info["ball"][0] 
+                while blocker_pred<0 or blocker_pred>195 :
+                    if blocker_pred>195:
+                        blocker_pred = 390-blocker_pred
+                    elif blocker_pred<0 :
+                        blocker_pred = -blocker_pred
+                pred=150/slope + blocker_pred
+                while pred<0 or pred>195 :
+                    if pred>195:
+                        pred = 390-pred
+                    elif pred<0 :
+                        pred = -pred      
+                return move_to(player = '1P',pred = pred)
+            else:
+                pred = 100
+                return move_to(player = '1P',pred = pred)
         elif slope!=0:
             pred=(420-scene_info["ball"][1])/slope +scene_info["ball"][0]    
         while pred<0 or pred>195 :
